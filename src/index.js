@@ -14,11 +14,16 @@ app.use(bodyParser.urlencoded({extended:true}));
 
 app.use('/api' , apiroutes);
 
-
+const  UserService = require('./services/user-service')
 
 
 app.listen(PORT ,()=>{
     console.log(`server is running fine on port ${PORT}`)
+
+    const service = new UserService();
+    const newToken = service.createToken({email:'narendra@admin.com', id: 1});
+
+    console.log("new token is " , newToken);
 })
 
 }

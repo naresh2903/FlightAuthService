@@ -2,7 +2,8 @@ const  UserRepository = require('../repository/user-repository')
 
 const jwt = require('jsonwebtoken');
 const {JWT_KEY} = require('../config/serverConfig');
-const bcrypt = require('bcrypt')
+const bcrypt = require('bcrypt');
+const { use } = require('../routes');
 class UserService{
 
     constructor(){
@@ -91,7 +92,21 @@ class UserService{
 
     }
 
+    async isAuthenticated(token){
+        const response = this.verifyToken(token);
+        if(!response){
+            throw {error : "Invalid token"}
+        }
+        const user = this.userRepository.getById(response.id);
+        if(!user){
+            throw {error : "No user exist eith the corresponding token"}
+        }
+        return user.id;
+    }
+
 
 }
+
+
 
 module.exports=UserService;
